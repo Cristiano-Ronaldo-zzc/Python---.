@@ -1,0 +1,91 @@
+import random
+import datetime
+import argparse
+import re
+from fractions import Fraction
+
+def OPT(up_limit=10, oper_num=2, oper_variety=4, has_fraction=True):
+    '''
+     * 设置参数
+
+     * @param up_limit {int} 操作数数值上限
+
+     * @param oper_num {int} 操作数个数
+
+     * @param oper_variety {int} 运算符种类
+
+     * @param has_fraction {bool} 是否带有分数
+    '''
+    parse = argparse.ArgumentParser()
+    # 操作数数值上限
+    parse.add_argument('--up_limit', type=int, default=up_limit)
+    # 操作数个数
+    parse.add_argument('--oper_num', type=int, default=oper_num)
+    # 运算符种类
+    parse.add_argument('--oper_variety', type=int, default=oper_variety)
+    # 是否带有分数
+    parse.add_argument('--has_fraction', type=bool, default=has_fraction)
+
+    return parse.parse_args(args=[])
+
+class GeneralFormular:
+    '''
+     * 生成算式
+     
+     * @param opt {OPT} 参数
+    '''
+    def __init__(self, opt):
+        self.opt = opt
+
+    # @profile
+    def catFormula(self, operand1, operator, operand2):
+        '''
+        * 连接算式
+
+        * @param operand1 {str} 操作数1
+        
+        * @param opertor {str} 运算符
+
+        * @param operand2 {str} 操作数2
+
+        * @return {str}
+        '''
+
+        return "{}{}{}".format(operand1, operator, operand2)
+
+    # @profile
+    def getRandomIntOperand(self):
+        '''
+        * 返回随机整数操作数
+        
+        * @return {int} 
+        '''
+        return random.randint(0, self.opt.up_limit)
+    
+    # @profile
+    def getRandomFractionOperand(self):
+        '''
+        * 返回随机分数操作数
+        
+        * @return {str} 
+        '''
+        # 生成两个整数，一个作为分子，一个作为分母
+        num01 = self.getRandomIntOperand()
+        num02 = self.getRandomIntOperand()
+        while num01 == num02 or num02==0:
+            num02 = self.getRandomIntOperand()
+        while num01 == 0:
+            num01 = self.getRandomIntOperand()
+
+        # 保证分数为真分数
+        if num01 < num02:
+            return str(num01) + "/" + str(num02)
+        else:
+            return str(num02) + "/" + str(num01)
+
+    # @profile
+    def getRandomOperator(self):
+        '''
+        * 返回随机运算符
+
+        * @r
